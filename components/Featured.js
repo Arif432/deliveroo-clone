@@ -3,7 +3,7 @@ import React from 'react'
 import FeaturedCard from './FeaturedCard'
 import {ArrowRightIcon} from "react-native-heroicons/outline"
 
-const Featured = ({title,desc}) => {
+const Featured = ({id,title,description }) => {
   return (
     <View>
         <View className="flex-row px-4 mt-4 justify-between items-center">
@@ -11,7 +11,7 @@ const Featured = ({title,desc}) => {
             <ArrowRightIcon size={32} color="#00CCBB"/>
         </View>
 
-        <Text className="text-gray-400 text-sm px-4">{desc}</Text>
+        <Text className="text-gray-400 text-sm px-4 mb-2 mt-[-2]">{description}</Text>
 
         <ScrollView
         showsHorizontalScrollIndicator={false}

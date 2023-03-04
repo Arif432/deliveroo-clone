@@ -1,14 +1,36 @@
-import { View, Text ,Image, TextInput, ScrollView } from 'react-native'
-import React from 'react'
+import { View, Text ,Image, TextInput, ScrollView} from 'react-native'
+import React , { useEffect,useState  ,useLayoutEffect}from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Categories from '../components/Categories';
 import Featured from "../components/Featured"
+import sanityClient from "../sanity";
+
 
 import {
     ChevronDownIcon,Bars3Icon,
     UserIcon, MagnifyingGlassIcon} from "react-native-heroicons/outline"
 
 const HomeScreen = () => {
+
+    const [featuredCategories, setFeaturedCategories] = useState([]);
+
+  useEffect(() => {
+    sanityClient
+      .fetch(`
+        *[_type == "featured"] {
+          ...,
+          restaurants[]->{
+          ...,
+          dishes[] ->
+        }
+      }
+    `)
+    .then((data) => {
+      setFeaturedCategories(data);
+    })
+}, []);
+
+   console.log("categories",featuredCategories);
   return (
     
     <SafeAreaView className="flex-1 pb-4">
@@ -28,7 +50,7 @@ const HomeScreen = () => {
 
                     <Text className="font-bold text-xl">
                         Current Location
-                        <ChevronDownIcon size={20} color="#00CCBB"/>
+                        <ChevronDownIcon size={18} color="#00CCBB"/>
                     </Text>
                 </View>
 
@@ -55,17 +77,27 @@ const HomeScreen = () => {
         {/* vertical scrollView our the screen */}
         <ScrollView className="bg-gray-100">
             <Categories/>
-            <Featured 
-            desc="paid promotions from our parteners"
-            title="Featured"/>
 
-            <Featured 
-            desc="eat like spending zero"
+            {featuredCategories?.map((catg)=>{
+              const {name,short_description,_id} = catg
+              return(
+                <Featured 
+                key={_id}
+                id={_id}
+                title ={name}
+                description = {short_description}
+                />
+            )
+            })}
+            
+
+            {/* <Featured 
+            description="eat like spending zero"
             title="Tasty Discount"/>
             
             <Featured 
-            desc="why not support your local hotel tonight"
-            title="Offers near you"/>
+            description="why not support your local hotel tonight"
+            title="Offers near you"/> */}
 
         </ScrollView>
 

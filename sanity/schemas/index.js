@@ -7,6 +7,7 @@ import { createSchema } from 'sanity'
 export const schemaTypes = [restaurant, dish, category, featured]
 
 export default createSchema({
+    
     name : "default",
     types : schemaTypes.concat({schemaTypes})
 })
